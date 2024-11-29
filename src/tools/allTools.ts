@@ -1,4 +1,5 @@
-import { getBalanceTool } from './get-balance.js';
+import { getBalanceTool } from './getBalance.js';
+import { getWalletAddressTool } from './getWalletAddress.js';
 import { sendTransactionTool } from './sendTransaction.js';
 import { writeContractTool } from './writeContract.js';
 
@@ -21,7 +22,10 @@ export interface ToolConfig<T = any> {
 }
 
 export const tools: Record<string, ToolConfig> = {
+    // == READ == \\
     get_balance: getBalanceTool,
+    get_wallet_address: getWalletAddressTool,
+    // == WRITE == \\
     send_transaction: sendTransactionTool,
     write_contract: writeContractTool,
     // Add more tools here...

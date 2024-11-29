@@ -9,7 +9,12 @@ const client = new OpenAI();
 
 async function main() {
     const assistant = await createAssistant(client);
-    const thread = await createThread(client, "Hey, send 0.001 ETH to 0x273B3527BF5b607dE86F504fED49e1582dD2a1C6");
+    const thread = await createThread(client, `Hey, mint an NFT on this smart contract 0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA. 
+        I don't have the ABI but here is the mint function signature: function mint(address to, uint256 qty) external;
+        
+        I want to mint 1 NFT to my wallet.
+
+        `);
     const run = await createRun(client, thread, assistant.id);
     const result = await performRun(run, client, thread);
     console.log(result);
