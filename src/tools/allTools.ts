@@ -16,7 +16,7 @@ export interface ToolConfig<T = any> {
             };
         };
     };
-    handler: (args: T) => Promise<string | number>;
+    handler: (args: T) => Promise<string | number | bigint>;
 }
 
 export const tools: Record<string, ToolConfig> = {

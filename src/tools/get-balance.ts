@@ -1,7 +1,10 @@
+import { Address } from 'viem';
+import { createViemPublicClient } from '../viem/createViemPublicClient.js';
 import { ToolConfig } from './allTools.js';
+import { formatEther } from 'viem';
 
 interface GetBalanceArgs {
-    wallet: string;
+    wallet: Address;
 }
 
 export const getBalanceTool: ToolConfig<GetBalanceArgs> = {
@@ -24,7 +27,12 @@ export const getBalanceTool: ToolConfig<GetBalanceArgs> = {
         }
     },
     handler: async ({ wallet }) => {
-        // Implement actual balance checking logic here
-        return '69420';
+        return await getBalance(wallet);
     }
 };
+
+async function getBalance(wallet: Address) {
+    const publicClient = createViemPublicClient();
+    const balance = await publicClient.getBalance({ address: wallet });
+    return formatEther(balance);
+}
