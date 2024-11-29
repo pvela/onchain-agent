@@ -1,27 +1,37 @@
 import OpenAI from "openai";
 import { Run } from "openai/resources/beta/threads/runs/runs";
 import { Thread } from "openai/resources/beta/threads/threads";
+import { tools } from '../tools/allTools.js';
 
 export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Thread): Promise<Run> {
-    if (
-        run.required_action?.submit_tool_outputs?.tool_calls
-    ) {
-        const toolOutputs = run.required_action.submit_tool_outputs.tool_calls
-            .map((tool) => {
-                if (tool.function.name === "get_balance") {
+    if (run.required_action?.submit_tool_outputs?.tool_calls) {
+        const toolOutputs = await Promise.all(
+            run.required_action.submit_tool_outputs.tool_calls.map(async (tool) => {
+                const toolConfig = tools[tool.function.name];
+
+                if (!toolConfig) throw new Error(`Tool ${tool.function.name} not found. Exiting out.`);
+
+                try {
+                    const args = JSON.parse(tool.function.arguments) as Parameters<typeof toolConfig.handler>[0];
+                    const output = await toolConfig.handler(args);
                     return {
                         tool_call_id: tool.id,
-                        output: "69420", // TODO: Implement this
+                        output: output.toString(),
                     };
+                } catch (error) {
+                    console.error(`Error executing tool ${tool.function.name}:`, error);
+                    return null;
                 }
-                return null;
-            }).filter((output): output is { tool_call_id: string; output: string } => output !== null);
+            })
+        );
 
-        if (toolOutputs.length > 0) {
+        const validOutputs = toolOutputs.filter((output): output is { tool_call_id: string; output: string } => output !== null);
+
+        if (validOutputs.length > 0) {
             return await client.beta.threads.runs.submitToolOutputsAndPoll(
                 thread.id,
                 run.id,
-                { tool_outputs: toolOutputs },
+                { tool_outputs: validOutputs },
             );
         }
     }
