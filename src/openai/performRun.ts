@@ -18,6 +18,29 @@ export async function performRun(run: Run, client: OpenAI, thread: Thread) {
         }
     }
 
+
+    if (run.status === 'failed') {
+        console.error('Run failed:', run.last_error);
+        await client.beta.threads.messages.create(thread.id, {
+            role: 'assistant',
+            content: `I encountered an error: ${run.last_error?.message || 'Unknown error'}`
+        });
+    }
+
     const messages = await client.beta.threads.messages.list(thread.id);
-    return messages.data[0].content[0];
+
+    const assistantMessage = messages.data.find(message => message.role === 'assistant');
+    if (!assistantMessage) {
+        if (run.status === 'failed') {
+            return {
+                type: 'text',
+                text: {
+                    value: `Run failed: ${run.last_error?.message || 'Unknown error'}`,
+                    annotations: []
+                }
+            };
+        }
+        return { type: 'text', text: { value: 'No response from assistant', annotations: [] } };
+    }
+    return assistantMessage.content[0];
 }
