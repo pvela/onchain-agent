@@ -9,6 +9,9 @@ export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Threa
             run.required_action.submit_tool_outputs.tool_calls.map(async (tool) => {
                 const toolConfig = tools[tool.function.name];
 
+                console.log(`🤖 Assistant calling: ${tool.function.name}`);
+                console.log(`📝 Parameters:`, JSON.parse(tool.function.arguments));
+
                 if (!toolConfig) throw new Error(`Tool ${tool.function.name} not found. Exiting out.`);
 
                 try {
@@ -20,7 +23,10 @@ export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Threa
                     };
                 } catch (error) {
                     console.error(`Error executing tool ${tool.function.name}:`, error);
-                    return null;
+                    return {
+                        tool_call_id: tool.id,
+                        output: `Error: ${error instanceof Error ? error.message : String(error)}`,
+                    };
                 }
             })
         );
