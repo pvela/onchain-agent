@@ -9,7 +9,7 @@ export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Threa
             run.required_action.submit_tool_outputs.tool_calls.map(async (tool) => {
                 const toolConfig = tools[tool.function.name];
 
-                console.log(`🤖 Joe is calling: ${tool.function.name}`);
+                console.log(`💾 [Alt] Executing: ${tool.function.name} | Connection stable.`);
 
                 if (!toolConfig) throw new Error(`Tool ${tool.function.name} not found. Exiting out.`);
 

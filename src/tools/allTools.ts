@@ -5,6 +5,7 @@ import { readContractTool } from './readContract.js';
 import { sendTransactionTool } from './sendTransaction.js';
 import { writeContractTool } from './writeContract.js';
 import { getContractAbiTool } from './getContractAbi.js';
+import { getTransactionReceiptTool } from './getTransactionReceipt.js';
 
 export type ToolHandler = (args: Record<string, any>) => Promise<string> | string;
 
@@ -31,6 +32,7 @@ export const tools: Record<string, ToolConfig> = {
     get_contract_bytecode: getContractBytecodeTool,
     get_contract_abi: getContractAbiTool,
     read_contract: readContractTool,
+    get_transaction_receipt: getTransactionReceiptTool,
 
     // == WRITE == \\
     send_transaction: sendTransactionTool,
