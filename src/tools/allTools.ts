@@ -7,6 +7,7 @@ import { writeContractTool } from './writeContract.js';
 import { getContractAbiTool } from './getContractAbi.js';
 import { getTransactionReceiptTool } from './getTransactionReceipt.js';
 import { deployErc20Tool } from './deployErc20.js';
+import { uniswapV3CreatePoolTool } from './uniswapV3createPool.js';
 
 export type ToolHandler = (args: Record<string, any>) => Promise<string> | string;
 
@@ -39,6 +40,7 @@ export const tools: Record<string, ToolConfig> = {
     send_transaction: sendTransactionTool,
     write_contract: writeContractTool,
     deploy_erc20: deployErc20Tool,
+    create_uniswap_v3_pool: uniswapV3CreatePoolTool,
 
     // Add more tools here...
 };

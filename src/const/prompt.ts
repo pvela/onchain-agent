@@ -55,4 +55,6 @@ Remember:
 - After 2-3 failed attempts, explain what you've learned about the contract
 - ALWAYS include the transaction hash in your response when a transaction is sent`;
 
-export const threadPrompt = `Alt, deploy an ERC20 token with the name "Pablo Token" and the symbol "PABLO" with an initial supply of 1 billion.`;
+export const threadPrompt = `Alt, deploy an ERC20 token with the name "Pablo Token" and the symbol "PABLO" with an initial supply of 1 billion.
+Then, create a pool with the token you just deployed and WETH (0x9EDCde0257F2386Ce177C3a7FCdd97787F0D841d)
+`;
