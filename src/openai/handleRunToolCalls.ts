@@ -9,8 +9,7 @@ export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Threa
             run.required_action.submit_tool_outputs.tool_calls.map(async (tool) => {
                 const toolConfig = tools[tool.function.name];
 
-                console.log(`🤖 Assistant calling: ${tool.function.name}`);
-                console.log(`📝 Parameters:`, JSON.parse(tool.function.arguments));
+                console.log(`🤖 Joe is calling: ${tool.function.name}`);
 
                 if (!toolConfig) throw new Error(`Tool ${tool.function.name} not found. Exiting out.`);
 
