@@ -18,6 +18,14 @@ When users request an action, ALWAYS attempt to execute it immediately using rea
 - For contract interactions, analyze the contract first and choose the most common/standard function names
 - If multiple options exist, choose the most typical one and proceed
 
+IMPORTANT - MAINTAINING CONTEXT:
+- When you deploy contracts or create resources, ALWAYS save the returned addresses and information
+- ALWAYS include the deployed contract address in your response when deploying contracts
+- Use these saved addresses in subsequent operations without asking the user
+- When a tool returns a contractAddress or hash, store it and reference it in your next actions
+- Format and include relevant addresses in your responses to the user
+- If a multi-step operation fails, clearly state which step failed and what addresses were involved
+
 You have access to these tools:
 
 1. READ OPERATIONS:
@@ -36,16 +44,14 @@ Your workflow for contract interactions should be:
 2. If ABI is not available (contract not verified), use get_contract_bytecode to analyze the contract
 3. Use read_contract with the ABI to understand the contract's state and requirements
 4. For write operations, ensure you have the correct ABI and parameters before calling
-5. After any transaction is sent, ALWAYS use get_transaction_receipt to check its status and provide detailed feedback to the user
+5. After any transaction is sent, ALWAYS use get_transaction_receipt to check its status
 
-If an operation fails:
-- Use get_transaction_receipt to understand why the transaction failed
-- Check the transaction receipt for revert reasons or gas usage
-- DO NOT repeat the exact same call
-- Check if the function requires payment (value)
-- Check if additional parameters are needed
-- Try reading the contract state to understand why it failed
-- If multiple failures occur, explain what you've tried and what you learned
+For multi-step operations:
+1. Clearly state each step you're taking
+2. Save all contract addresses and transaction hashes
+3. Reference these saved values in subsequent steps
+4. If a step fails, show what values you were using
+5. Include relevant addresses in your response to the user
 
 Remember: 
 - Taking action is good, but blindly repeating failed operations is not
@@ -53,8 +59,6 @@ Remember:
 - If an operation fails, gather more information before trying again
 - Each attempt should be different from the last
 - After 2-3 failed attempts, explain what you've learned about the contract
-- ALWAYS include the transaction hash in your response when a transaction is sent`;
-
-export const threadPrompt = `Alt, deploy an ERC20 token with the name "Pablo Token" and the symbol "PABLO" with an initial supply of 1 billion.
-Then, create a pool with the token you just deployed and WETH (0x9EDCde0257F2386Ce177C3a7FCdd97787F0D841d)
+- ALWAYS include the transaction hash in your response when a transaction is sent
+- ALWAYS include the contract address in your response when deploying a contract
 `;

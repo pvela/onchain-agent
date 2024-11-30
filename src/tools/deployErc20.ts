@@ -1,6 +1,7 @@
 import { ToolConfig } from './allTools.js';
 import { createViemWalletClient } from '../viem/createViemWalletClient.js';
 import { ERC20_ABI, ERC20_BYTECODE } from '../const/contractDetails.js';
+import { createViemPublicClient } from '../viem/createViemPublicClient.js';
 
 export const deployErc20Tool: ToolConfig = {
     definition: {
@@ -21,23 +22,30 @@ export const deployErc20Tool: ToolConfig = {
                     },
                     initialSupply: {
                         type: 'string',
-                        description: 'The initial supply of tokens (in wei)'
+                        description: 'Initial supply in natural language (e.g., "one million", "half a billion", "10k", "1.5M tokens"). Interpret the amount and format it into a number amount and then convert it into wei. Defaults to 1 billion tokens if not specified.',
                     }
                 },
-                required: ['name', 'symbol', 'initialSupply']
+                required: ['name', 'symbol']
             }
         }
     },
-    handler: async (args: { name: string, symbol: string, initialSupply: string }) => {
+    handler: async (args: { name: string, symbol: string, initialSupply?: string }) => {
+        const baseNumber = parseFloat(args.initialSupply || '1000000000'); // 1 billion default
+
+        const publicClient = createViemPublicClient();
         const walletClient = createViemWalletClient();
 
         const hash = await walletClient.deployContract({
             account: walletClient.account,
             abi: ERC20_ABI,
             bytecode: ERC20_BYTECODE,
-            args: [args.name, args.symbol, BigInt(args.initialSupply)]
+            args: [args.name, args.symbol, baseNumber]
         });
 
-        return hash;
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+
+        console.log(`Contract deployed at address: ${receipt.contractAddress}`);
+
+        return `${args.name} (${args.symbol}) token deployed successfully at: ${receipt.contractAddress}`;
     }
 };
