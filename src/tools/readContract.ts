@@ -1,4 +1,4 @@
-import { Address, formatUnits } from 'viem';
+import { Address } from 'viem';
 import { createViemPublicClient } from '../viem/createViemPublicClient.js';
 import { ToolConfig } from './allTools.js';
 

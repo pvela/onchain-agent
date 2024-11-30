@@ -55,4 +55,4 @@ Remember:
 - After 2-3 failed attempts, explain what you've learned about the contract
 - ALWAYS include the transaction hash in your response when a transaction is sent`;
 
-export const threadPrompt = `Hey, mint 1 NFT on this smart contract 0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA.`;
+export const threadPrompt = `Alt, deploy an ERC20 token with the name "Pablo Token" and the symbol "PABLO" with an initial supply of 1 billion.`;

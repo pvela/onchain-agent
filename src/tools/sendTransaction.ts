@@ -1,4 +1,4 @@
-import { Address, Hash, parseEther, AccessList } from 'viem'
+import { Address, parseEther, AccessList } from 'viem'
 import { createViemWalletClient } from '../viem/createViemWalletClient.js';
 import { ToolConfig } from './allTools.js';
 

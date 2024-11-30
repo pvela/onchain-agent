@@ -41,5 +41,6 @@ function extractReceiptInfo(receipt: any) {
 async function getTransactionReceipt(hash: Hash) {
     const publicClient = createViemPublicClient();
     const receipt = await publicClient.getTransactionReceipt({ hash });
+
     return extractReceiptInfo(receipt);
 }

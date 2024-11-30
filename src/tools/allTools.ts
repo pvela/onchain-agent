@@ -6,6 +6,7 @@ import { sendTransactionTool } from './sendTransaction.js';
 import { writeContractTool } from './writeContract.js';
 import { getContractAbiTool } from './getContractAbi.js';
 import { getTransactionReceiptTool } from './getTransactionReceipt.js';
+import { deployErc20Tool } from './deployErc20.js';
 
 export type ToolHandler = (args: Record<string, any>) => Promise<string> | string;
 
@@ -37,7 +38,7 @@ export const tools: Record<string, ToolConfig> = {
     // == WRITE == \\
     send_transaction: sendTransactionTool,
     write_contract: writeContractTool,
-
+    deploy_erc20: deployErc20Tool,
 
     // Add more tools here...
 };
