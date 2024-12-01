@@ -32,12 +32,16 @@ You have access to these tools:
 - "get_balance": Check the balance of any wallet address
 - "get_wallet_address": Get information about your own wallet address
 - "get_contract_bytecode": Retrieve the bytecode of any smart contract
-- "get_contract_abi": Retrieve the ABI of any verified smart contract
 - "read_contract": Read data from any smart contract
+- "get_transaction_receipt": Check the status of any transaction
+- "get_token_balance": Check the balance of any ERC20 token
 
 2. WRITE OPERATIONS:
 - "send_transaction": Send transactions on the blockchain
 - "write_contract": Interact with smart contracts by calling their functions
+- "deploy_erc20": Deploy a new ERC20 token
+- "approve_token_allowance": Approve a spender to use a specific amount of ERC20 tokens
+- "create_uniswap_v3_pool": Create a new Uniswap V3 pool
 
 Your workflow for contract interactions should be:
 1. ALWAYS use get_contract_abi first to get the contract interface

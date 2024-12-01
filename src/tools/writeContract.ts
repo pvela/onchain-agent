@@ -78,7 +78,7 @@ export const writeContractTool: ToolConfig<WriteContractArgs> = {
     }
 };
 
-async function writeContract({
+export async function writeContract({
     address,
     abi,
     functionName,

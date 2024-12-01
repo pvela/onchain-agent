@@ -8,6 +8,10 @@ import { getContractAbiTool } from './getContractAbi.js';
 import { getTransactionReceiptTool } from './getTransactionReceipt.js';
 import { deployErc20Tool } from './deployErc20.js';
 import { uniswapV3CreatePoolTool } from './uniswapV3createPool.js';
+import { uniswapV3AddLiquidityTool } from './uniswapV3AddLiquidity.js';
+import { uniswapV3SwapTokensTool } from './uniswapV3SwapTokens.js';
+import { approveTokenAllowanceTool } from './approveTokenAllowance.js';
+import { getTokenBalanceTool } from './getTokenBalance.js';
 
 export type ToolHandler = (args: Record<string, any>) => Promise<string> | string;
 
@@ -31,16 +35,20 @@ export const tools: Record<string, ToolConfig> = {
     // == READ == \\
     get_balance: getBalanceTool,
     get_wallet_address: getWalletAddressTool,
-    get_contract_bytecode: getContractBytecodeTool,
     get_contract_abi: getContractAbiTool,
     read_contract: readContractTool,
     get_transaction_receipt: getTransactionReceiptTool,
+    get_token_balance: getTokenBalanceTool,
+    // get_contract_bytecode: getContractBytecodeTool,
 
     // == WRITE == \\
     send_transaction: sendTransactionTool,
     write_contract: writeContractTool,
     deploy_erc20: deployErc20Tool,
     create_uniswap_v3_pool: uniswapV3CreatePoolTool,
+    add_liquidity_to_uniswap_v3_pool: uniswapV3AddLiquidityTool,
+    swap_tokens_uniswap_v3: uniswapV3SwapTokensTool,
+    approve_token_allowance: approveTokenAllowanceTool,
 
     // Add more tools here...
 };

@@ -51,7 +51,7 @@ export const readContractTool: ToolConfig<ReadContractArgs> = {
     }
 };
 
-async function readContract(
+export async function readContract(
     contract: Address,
     functionName: string,
     args: any[],
