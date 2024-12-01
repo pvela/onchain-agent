@@ -1,5 +1,4 @@
 import { getBalanceTool } from './getBalance.js';
-import { getContractBytecodeTool } from './getContractBytecode.js';
 import { getWalletAddressTool } from './getWalletAddress.js';
 import { readContractTool } from './readContract.js';
 import { sendTransactionTool } from './sendTransaction.js';
