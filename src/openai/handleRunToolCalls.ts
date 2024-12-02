@@ -4,41 +4,45 @@ import { Thread } from "openai/resources/beta/threads/threads";
 import { tools } from '../tools/allTools.js';
 
 export async function handleRunToolCalls(run: Run, client: OpenAI, thread: Thread): Promise<Run> {
-    if (run.required_action?.submit_tool_outputs?.tool_calls) {
-        const toolOutputs = await Promise.all(
-            run.required_action.submit_tool_outputs.tool_calls.map(async (tool) => {
-                const toolConfig = tools[tool.function.name];
 
-                console.log(`💾 [Alt] Executing: ${tool.function.name} | Connection stable.`);
+    console.log(`💾 Handling tool calls for run ${run.id}`);
 
-                if (!toolConfig) throw new Error(`Tool ${tool.function.name} not found. Exiting out.`);
+    const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls;
+    if (!toolCalls) return run;
 
-                try {
-                    const args = JSON.parse(tool.function.arguments) as Parameters<typeof toolConfig.handler>[0];
-                    const output = await toolConfig.handler(args);
-                    return {
-                        tool_call_id: tool.id,
-                        output: output.toString(),
-                    };
-                } catch (error) {
-                    console.error(`Error executing tool ${tool.function.name}:`, error);
-                    return {
-                        tool_call_id: tool.id,
-                        output: `Error: ${error instanceof Error ? error.message : String(error)}`,
-                    };
-                }
-            })
-        );
+    const toolOutputs = await Promise.all(
+        toolCalls.map(async (tool) => {
+            const toolConfig = tools[tool.function.name];
+            if (!toolConfig) {
+                console.error(`Tool ${tool.function.name} not found`);
+                return null;
+            }
 
-        const validOutputs = toolOutputs.filter((output): output is { tool_call_id: string; output: string } => output !== null);
+            console.log(`💾 Executing: ${tool.function.name}`);
 
-        if (validOutputs.length > 0) {
-            return await client.beta.threads.runs.submitToolOutputsAndPoll(
-                thread.id,
-                run.id,
-                { tool_outputs: validOutputs },
-            );
-        }
-    }
-    return run;
+            try {
+                const args = JSON.parse(tool.function.arguments);
+                const output = await toolConfig.handler(args);
+                return {
+                    tool_call_id: tool.id,
+                    output: String(output)
+                };
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                return {
+                    tool_call_id: tool.id,
+                    output: `Error: ${errorMessage}`
+                };
+            }
+        })
+    );
+
+    const validOutputs = toolOutputs.filter(Boolean) as OpenAI.Beta.Threads.Runs.RunSubmitToolOutputsParams.ToolOutput[];
+    if (validOutputs.length === 0) return run;
+
+    return client.beta.threads.runs.submitToolOutputsAndPoll(
+        thread.id,
+        run.id,
+        { tool_outputs: validOutputs }
+    );
 }

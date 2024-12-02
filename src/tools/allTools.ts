@@ -10,8 +10,6 @@ import { uniswapV3CreatePoolTool } from './uniswapV3createPool.js';
 import { approveTokenAllowanceTool } from './approveTokenAllowance.js';
 import { getTokenBalanceTool } from './getTokenBalance.js';
 
-export type ToolHandler = (args: Record<string, any>) => Promise<string> | string;
-
 export interface ToolConfig<T = any> {
     definition: {
         type: 'function';
@@ -25,7 +23,7 @@ export interface ToolConfig<T = any> {
             };
         };
     };
-    handler: (args: T) => Promise<string | number | bigint | boolean | object>;
+    handler: (args: T) => Promise<any>;
 }
 
 export const tools: Record<string, ToolConfig> = {
