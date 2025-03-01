@@ -9,6 +9,8 @@ import { deployErc20Tool } from './deployErc20.js';
 import { uniswapV3CreatePoolTool } from './uniswapV3createPool.js';
 import { approveTokenAllowanceTool } from './approveTokenAllowance.js';
 import { getTokenBalanceTool } from './getTokenBalance.js';
+import { getMedicinePriceTool } from './getMedicinePrice.js';
+import { getMedicineCodeTool } from './getMedicineCode.js';
 
 export interface ToolConfig<T = any> {
     definition: {
@@ -34,6 +36,8 @@ export const tools: Record<string, ToolConfig> = {
     read_contract: readContractTool,
     get_transaction_receipt: getTransactionReceiptTool,
     get_token_balance: getTokenBalanceTool,
+    get_medicine_price: getMedicinePriceTool,
+    get_medicine_code: getMedicineCodeTool,
     // get_contract_bytecode: getContractBytecodeTool,
 
     // == WRITE == \\
